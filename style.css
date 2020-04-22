@@ -1,81 +1,127 @@
-.container {
-  width: 600px;
-  font-family: 'Open Sans', sans-serif;
-  margin-left: auto;
-  margin-right: auto;
+main {
+  display: flex;
+  justify-content: center;
 }
-#email {
-  display: block;
-  width: 100%;
-  height: 30px;
-  padding: 3px;
-  border: solid thin #cfcfcf;
-  border-radius: 3px;
-  box-sizing: border-box;
-  margin-bottom: 5px;
-}
-button {
-  display: block;
-  width: 100%;
-  color: white;
-  background: #3cb878;
-  border: none;
-  height: 30px;
-}
-.newsletter {
-  color: grey;
-  border: solid thin #cfcfcf;
-  border-radius: 3px;
-  padding: 10px;
-  position: relative
-}
-.newsletter h3 {
-  margin-top: 0;
-}
-#checkbox {
-  position: relative;
-  top: 2px;
-}
-.closex {
-  position: absolute;
-  top: 2px;
-  right: 7px;
-    
-}
-.questioncircle {
-  width: 100px;
-  height: 100px;
-  background: #3cb878;
-  border-radius: 50%;
-    color: white;
-  font-size: 70px;
-  text-align: center;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  
-}
-.card {
-  width: 180px;
-  height: 200px;
-  text-align: center;
-  background: green;
-  box-shadow: 0px 0px 10px black;
-  color: white;
+
+.egeszdoboz {
+  margin: auto;
+  width: 50%;
 }
 img {
-  width: 180px;
-  height: 200px;
+  width: 1300px;
 }
-.plant {
-  margin-top: -40px
+.text {
+  margin: auto;
+  width: 750px;
 }
-.cardholder {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+#imagebox {
+  position: relative;
+  margin-bottom: 50px;
 }
-body {
-  background: rgb(2,0,36);
-background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,0.4150035014005602) 35%, rgba(0,212,255,1) 100%);
+#kepfelirat1 {
+  position: absolute;
+  top: 220px;
+  margin-left: 300px;
+  font-family: 'Abril Fatface', regular;
+  color: #222;
+  font-size: 35px;
+}
+#kepfelirat2 {
+  position: absolute;
+  top: 230px;
+  margin-left: 300px;
+  font-family: 'Abril Fatface', regular;
+  color: #222;
+  font-size: 70px;
+}
+.elsoparagrafus {
+  
+ font-family: 'Josefin Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 300;
+  margin: auto;
+  width: 100%;
+}
+#kiemeles {
+  font-weight: 400;
+}
+ul {
+  
+ font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  margin-left: -15px;
+  line-height: 130%;
+  margin-bottom: 40px;
+}
+.quoteblokk {
+  display: block;
+  justify-content: center;
+  margin-left: -30px;
+  
+}
+
+.quote {
+  background:#222D;
+  color: white;
+  font-family: 'Abril Fatface', regular;
+  font-size: 24px;
+/*   height: 145px; */
+  width: 800px;
+/*   margin-left: 0; */
+  position: relative;  
+/*   text-align: center; */
+/*   justify-content: center; */
+}
+.quoteinside {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+
+}
+#idezojel {
+  position: absolute;
+  padding: 0px;
+  margin: 0px;
+  top: -20px;
+  left: 0px;
+  font-size: 110px
+}
+.cimek {
+/*   margin: auto;
+  width: 100%; */
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
+  font-size: 25px;
+  text-transform: uppercase;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  
+}
+.alcimek {
+/*   margin: auto;
+  width: 55%; */
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+.alalcimek {
+  font-family: 'Merriweather', serif;
+  font-weight: 300;
+  font-size: 15px;
+  margin-bottom: 30px;
+  margin-top: -25px;
+}
+p {
+  margin: auto;
+  width: 750px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+hr.solid {
+  border-top: 4px solid #222;
+  margin-left: -30px;
 }

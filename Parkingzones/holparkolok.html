@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Budapest Parking Zones</title>
+<title>Parking Zones</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
@@ -10,6 +10,7 @@
 html, body {
     margin: 0;
     height: 100%;
+    font-family: Arial;
 }
 
 #map {
@@ -17,17 +18,66 @@ html, body {
     width: 100%;
 }
 
-#info {
+/* =========================
+   BOTTOM SHEET (mobile UI)
+========================= */
+#panel {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 999;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 30%;
+    min-height: 160px;
+
     background: white;
-    padding: 12px;
-    border-radius: 8px;
-    font-family: Arial;
-    min-width: 220px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.2);
+    z-index: 999;
+
+    padding: 14px;
+    box-sizing: border-box;
+
+    overflow: auto;
+}
+
+/* zone title */
+#zoneTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* secondary text */
+#zoneMeta {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #444;
+}
+
+/* GPS floating button */
+#gpsBtn {
+    position: absolute;
+    bottom: 32%;
+    right: 16px;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: #1a73e8;
+    color: white;
+    font-size: 22px;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+#gpsBtn:active {
+    transform: scale(0.95);
 }
 </style>
 </head>
@@ -36,20 +86,20 @@ html, body {
 
 <div id="map"></div>
 
-<div id="info">
-<b>Parking zones</b><br>
-Click a zone or use GPS
-<br><br>
-<button onclick="locate()">📍 My location</button>
+<!-- GPS button -->
+<button id="gpsBtn" onclick="locate()">📍</button>
+
+<!-- bottom panel -->
+<div id="panel">
+    <div id="zoneTitle">No zone selected</div>
+    <div id="zoneMeta">
+        Click a zone or use GPS
+    </div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-/* =========================
-   PASTE ZONE DATA HERE
-========================= */
-
 const zones = [
     {
         "color": "#8d42f5",
@@ -129273,8 +129323,6 @@ const zones = [
     }
 ];
 
-/* ========================= */
-
 const map = L.map('map').setView([47.4979, 19.0402], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -129282,9 +129330,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let gpsMarker = null;
-let currentPolygon = null;
 
-// FIX: ensure numbers + correct lat/lng order
 function toLatLng(zone) {
     return zone.geometry.map(p => [
         parseFloat(p.lat),
@@ -129292,33 +129338,44 @@ function toLatLng(zone) {
     ]);
 }
 
-// draw all zones (this was missing / broken in earlier versions)
-const allLayers = [];
+// draw zones
+const layers = [];
 
 zones.forEach(zone => {
 
-    const latlngs = toLatLng(zone);
-
-    const poly = L.polygon(latlngs, {
-        color: zone.color || 'blue',
+    const poly = L.polygon(toLatLng(zone), {
+        color: zone.color,
         weight: 2,
         fillOpacity: 0.3
     }).addTo(map);
 
-    poly.on("click", () => {
-        showInfo(zone);
-    });
+    poly.on("click", () => showZone(zone));
 
-    allLayers.push(poly);
+    layers.push(poly);
 });
 
-if (allLayers.length > 0) {
-    const group = L.featureGroup(allLayers);
+// zoom to data
+if (layers.length) {
+    const group = L.featureGroup(layers);
     map.fitBounds(group.getBounds());
+}
+
+// update panel
+function showZone(zone) {
+    document.getElementById("zoneTitle").innerText =
+        "Zone " + zone.zoneid;
+
+    document.getElementById("zoneMeta").innerHTML = `
+        <b>${zone.telepules}</b><br>
+        Fee: ${zone.fee} Ft / hour<br>
+        Time: ${zone.timetable}<br><br>
+        <small>${zone.service_na}</small>
+    `;
 }
 
 // GPS
 function locate() {
+
     navigator.geolocation.getCurrentPosition(pos => {
 
         const lat = pos.coords.latitude;
@@ -129329,24 +129386,12 @@ function locate() {
         gpsMarker = L.marker([lat, lng]).addTo(map);
         map.setView([lat, lng], 16);
 
-        document.getElementById("info").innerHTML = `
-            <b>Your location</b><br>
-            ${lat.toFixed(5)}, ${lng.toFixed(5)}<br><br>
-            Click a zone
-        `;
-    });
-}
+        document.getElementById("zoneTitle").innerText =
+            "Your location";
 
-// info panel
-function showInfo(zone) {
-    document.getElementById("info").innerHTML = `
-        <b>Zone: ${zone.zoneid}</b><br>
-        ${zone.telepules}<br><br>
-        Fee: ${zone.fee} Ft/hour<br>
-        Time: ${zone.timetable}<br><br>
-        <small>${zone.service_na}</small><br><br>
-        <button onclick="locate()">📍 My location</button>
-    `;
+        document.getElementById("zoneMeta").innerHTML =
+            `${lat.toFixed(5)}, ${lng.toFixed(5)}<br><br>Move map or tap zone`;
+    });
 }
 
 </script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Parking Zones</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -11,6 +11,7 @@ html, body {
     margin: 0;
     height: 100%;
     font-family: Arial;
+    font-size: 18px;
 }
 
 #map {
@@ -27,8 +28,8 @@ html, body {
     left: 0;
     right: 0;
 
-    height: 30%;
-    min-height: 160px;
+    height: 32%;
+    min-height: 180px;
 
     background: white;
     border-top-left-radius: 16px;
@@ -37,15 +38,17 @@ html, body {
     box-shadow: 0 -2px 12px rgba(0,0,0,0.2);
     z-index: 999;
 
-    padding: 14px;
+    padding: 16px;
     box-sizing: border-box;
 
     overflow: auto;
+
+    font-size: 18px; /* important */
 }
 
 /* zone title */
 #zoneTitle {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
 }
 
@@ -59,18 +62,18 @@ html, body {
 /* GPS floating button */
 #gpsBtn {
     position: absolute;
-    bottom: 32%;
+    bottom: 34%;
     right: 16px;
 
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
 
     border-radius: 50%;
     border: none;
 
     background: #1a73e8;
     color: white;
-    font-size: 22px;
+    font-size: 26px;
 
     box-shadow: 0 3px 10px rgba(0,0,0,0.3);
     z-index: 1000;

@@ -395,17 +395,7 @@
             );
 
             // Keep VND as the active field
-            editing = "vnd";
-
-            vndInput.focus();
-
-            // Put cursor at the end
-            try {
-                vndInput.setSelectionRange(
-                    vndInput.value.length,
-                    vndInput.value.length
-                );
-            } catch (e) {}
+            editing = null;
         });
 
     });

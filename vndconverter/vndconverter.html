@@ -371,7 +371,7 @@
         const vnd = getNumber(vndInput.value);
         const huf = vnd / HUF_TO_VND;
 
-        hufInput.value = formatNumber(huf, 2);
+        hufInput.value = formatNumber(huf);
     });
 
 
@@ -391,8 +391,7 @@
             vndInput.value = formatNumber(newValue);
 
             hufInput.value = formatNumber(
-                newValue / HUF_TO_VND,
-                2
+                newValue / HUF_TO_VND
             );
 
             // Keep VND as the active field

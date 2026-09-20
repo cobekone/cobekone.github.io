@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HUF ↔ VND</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+        --bg: #f4f6f8;
+        --card: #ffffff;
+        --text: #17202a;
+        --muted: #7a8490;
+        --accent: #1769ff;
+        --accent-light: #e9f0ff;
+        --border: #e3e7ec;
+        --danger: #ff4d4d;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                     Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .app {
+        width: min(100%, 480px);
+        height: 100dvh;
+        max-height: 900px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2px 4px;
+    }
+
+    .title {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .rate {
+        font-size: 11px;
+        color: var(--muted);
+        background: white;
+        border: 1px solid var(--border);
+        padding: 6px 9px;
+        border-radius: 20px;
+        white-space: nowrap;
+    }
+
+    .converter {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .currency-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 13px 16px 15px;
+        box-shadow: 0 3px 14px rgba(0,0,0,0.035);
+    }
+
+    .currency-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3px;
+    }
+
+    .currency-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--muted);
+    }
+
+    .currency-code {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--accent);
+        background: var(--accent-light);
+        padding: 4px 8px;
+        border-radius: 7px;
+    }
+
+    input.amount {
+        display: block;
+        width: 100%;
+        border: 0;
+        outline: none;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        color: var(--text);
+        font-size: clamp(34px, 10vw, 48px);
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+    }
+
+    input.amount::selection {
+        background: #cfe0ff;
+    }
+
+    .swap {
+        align-self: center;
+        width: 38px;
+        height: 38px;
+        border: 3px solid var(--bg);
+        background: var(--accent);
+        color: white;
+        border-radius: 50%;
+        font-size: 19px;
+        font-weight: 700;
+        margin: -5px 0;
+        z-index: 2;
+        box-shadow: 0 3px 10px rgba(23,105,255,0.25);
+    }
+
+    .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        margin: 3px 3px -2px;
+    }
+
+    .quick-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+    }
+
+    .quick {
+        min-height: 48px;
+        border-radius: 13px;
+        background: white;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 750;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.025);
+        transition: transform .08s, background .08s;
+    }
+
+    .quick:active {
+        transform: scale(.95);
+        background: var(--accent-light);
+    }
+
+    .reset {
+        width: 100%;
+        min-height: 45px;
+        border-radius: 13px;
+        background: #fff0f0;
+        color: var(--danger);
+        font-size: 15px;
+        font-weight: 750;
+        border: 1px solid #ffd9d9;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 10px;
+        color: #a1a8b0;
+        margin-top: auto;
+        padding-bottom: 2px;
+    }
+
+    @media (max-height: 650px) {
+        .app {
+            padding: 10px 14px;
+            gap: 7px;
+        }
+
+        .currency-card {
+            padding: 9px 14px 10px;
+            border-radius: 15px;
+        }
+
+        input.amount {
+            font-size: 32px;
+        }
+
+        .quick {
+            min-height: 40px;
+        }
+
+        .swap {
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+        }
+
+        .footer {
+            display: none;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="title">Currency Converter</div>
+        <div class="rate">1 HUF = 82.06 VND</div>
+    </div>
+
+    <div class="converter">
+
+        <div class="currency-card">
+            <div class="currency-label">
+                <span class="currency-name">Hungarian Forint</span>
+                <span class="currency-code">HUF</span>
+            </div>
+            <input
+                id="huf"
+                class="amount"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                value="0"
+                aria-label="Hungarian Forint amount"
+            >
+        </div>
+
+        <button class="swap" id="swap" aria-label="Swap currencies">↕</button>
+
+        <div class="currency-card">
+            <div class="currency-label">
+                <span class="currency-name">Vietnamese Dong</span>
+                <span class="currency-code">VND</span>
+            </div>
+            <input
+                id="vnd"
+                class="amount"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                value="0"
+                aria-label="Vietnamese Dong amount"
+            >
+        </div>
+
+    </div>
+
+    <div class="section-label">Add to VND</div>
+
+    <div class="quick-buttons">
+        <button class="quick" data-add="5000">+5k</button>
+        <button class="quick" data-add="10000">+10k</button>
+        <button class="quick" data-add="50000">+50k</button>
+        <button class="quick" data-add="100000">+100k</button>
+        <button class="quick" data-add="500000">+500k</button>
+        <button class="quick" data-add="1000000">+1M</button>
+    </div>
+
+    <button class="reset" id="reset">Reset</button>
+
+    <div class="footer">
+        Fixed rate • 1 HUF = 82.06 VND
+    </div>
+
+</div>
+
+<script>
+    // ==========================================
+    // HARDCODED EXCHANGE RATE
+    // ==========================================
+    const HUF_TO_VND = 82.06;
+
+
+    const hufInput = document.getElementById("huf");
+    const vndInput = document.getElementById("vnd");
+    const resetButton = document.getElementById("reset");
+    const swapButton = document.getElementById("swap");
+
+    let editing = null;
+
+
+    // ------------------------------------------
+    // Formatting helpers
+    // ------------------------------------------
+
+    function getNumber(value) {
+        // Remove spaces and thousands separators
+        value = value
+            .replace(/\s/g, "")
+            .replace(/,/g, "");
+
+        const number = parseFloat(value);
+
+        return Number.isFinite(number) ? number : 0;
+    }
+
+    function formatNumber(number, decimals = 0) {
+        if (!Number.isFinite(number)) return "0";
+
+        return number.toLocaleString("en-US", {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        });
+    }
+
+
+    // ------------------------------------------
+    // HUF editing
+    // ------------------------------------------
+
+    hufInput.addEventListener("focus", () => {
+        editing = "huf";
+        hufInput.select();
+    });
+
+    hufInput.addEventListener("input", () => {
+        if (editing !== "huf") return;
+
+        const huf = getNumber(hufInput.value);
+        const vnd = huf * HUF_TO_VND;
+
+        vndInput.value = formatNumber(vnd);
+    });
+
+
+    // ------------------------------------------
+    // VND editing
+    // ------------------------------------------
+
+    vndInput.addEventListener("focus", () => {
+        editing = "vnd";
+        vndInput.select();
+    });
+
+    vndInput.addEventListener("input", () => {
+        if (editing !== "vnd") return;
+
+        const vnd = getNumber(vndInput.value);
+        const huf = vnd / HUF_TO_VND;
+
+        hufInput.value = formatNumber(huf, 2);
+    });
+
+
+    // ------------------------------------------
+    // Quick VND buttons
+    // ------------------------------------------
+
+    document.querySelectorAll(".quick").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const addition = Number(button.dataset.add);
+            const current = getNumber(vndInput.value);
+
+            const newValue = current + addition;
+
+            vndInput.value = formatNumber(newValue);
+
+            hufInput.value = formatNumber(
+                newValue / HUF_TO_VND,
+                2
+            );
+
+            // Keep VND as the active field
+            editing = "vnd";
+
+            vndInput.focus();
+
+            // Put cursor at the end
+            try {
+                vndInput.setSelectionRange(
+                    vndInput.value.length,
+                    vndInput.value.length
+                );
+            } catch (e) {}
+        });
+
+    });
+
+
+    // ------------------------------------------
+    // Reset
+    // ------------------------------------------
+
+    resetButton.addEventListener("click", () => {
+
+        hufInput.value = "0";
+        vndInput.value = "0";
+
+        editing = null;
+
+        hufInput.blur();
+        vndInput.blur();
+
+    });
+
+
+    // ------------------------------------------
+    // Swap currencies
+    // ------------------------------------------
+
+    let swapped = false;
+
+    swapButton.addEventListener("click", () => {
+
+        swapped = !swapped;
+
+        const huf = getNumber(hufInput.value);
+        const vnd = getNumber(vndInput.value);
+
+        if (swapped) {
+            // VND is now treated as the primary input
+            hufInput.value = formatNumber(vnd);
+            vndInput.value = formatNumber(huf);
+        } else {
+            hufInput.value = formatNumber(vnd);
+            vndInput.value = formatNumber(huf);
+        }
+
+    });
+
+
+    // ------------------------------------------
+    // Prevent accidental form-like submission
+    // ------------------------------------------
+
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+
+            if (document.activeElement === hufInput) {
+                hufInput.blur();
+            }
+
+            if (document.activeElement === vndInput) {
+                vndInput.blur();
+            }
+        }
+
+    });
+</script>
+
+</body>
+</html>
